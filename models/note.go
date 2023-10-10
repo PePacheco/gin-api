@@ -29,3 +29,15 @@ func NotesAll() *[]Note {
 func NotesCreate(note *Note) {
 	database.Create(note)
 }
+
+func NoteById(id uint) *Note {
+	var note Note
+	database.First(&note, id)
+	return &note
+}
+
+func NoteByName(name string) *Note {
+	var note Note
+	database.First(&note, name)
+	return &note
+}

@@ -34,8 +34,32 @@ func (c *NotesController) Create(context *gin.Context) {
 	service := services.CreateNoteService{
 		Repository: notesRepository,
 	}
-	service.Execute(&note)
+	err := service.Execute(&note)
+	if err != nil {
+		context.JSON(400, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
 	context.JSON(200, gin.H{
 		"note": note,
 	})
 }
+
+// func (c *NotesController) Show(context *gin.Context) {
+// 	notesRepository := &repositories.NotesRepositoryImpl{}
+// 	id := context.Param("id")
+// 	service := services.ShowNoteService{
+// 		Repository: notesRepository,
+// 	}
+// 	note, err := service.Execute(id)
+// 	if err != nil {
+// 		context.JSON(400, gin.H{
+// 			"error": err.Error(),
+// 		})
+// 		return
+// 	}
+// 	context.JSON(200, gin.H{
+// 		"note": note,
+// 	})
+// }
