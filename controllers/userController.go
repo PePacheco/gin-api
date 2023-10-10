@@ -35,7 +35,7 @@ func (u *UserController) Register(c *gin.Context) {
 }
 
 func (u *UserController) Login(c *gin.Context) {
-	var user models.User
+	var user models.UserInput
 	if err := c.ShouldBindJSON(&user); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
