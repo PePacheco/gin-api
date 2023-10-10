@@ -21,7 +21,7 @@ func CheckPassword(password, hash string) bool {
 	return err == nil
 }
 
-var jwtSecret = []byte("your-secret")
+var JwtSecret = []byte("your-secret")
 
 func CreateToken(user *models.User) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
@@ -30,12 +30,12 @@ func CreateToken(user *models.User) (string, error) {
 		"exp":      time.Now().Add(24 * time.Hour).Unix(),
 	})
 
-	return token.SignedString(jwtSecret)
+	return token.SignedString(JwtSecret)
 }
 
 func ValidateToken(tokenString string) bool {
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-		return jwtSecret, nil
+		return JwtSecret, nil
 	})
 
 	if err != nil || !token.Valid {
