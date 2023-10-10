@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"notes-app/helpers"
 	"notes-app/models"
+	"notes-app/repositories"
 
 	"github.com/gin-gonic/gin"
 )
@@ -26,7 +27,8 @@ func (u *UserController) Register(c *gin.Context) {
 	user := models.User{Username: input.Username, Email: input.Email}
 	user.Password = hashedPassword
 
-	if err := models.UserCreate(&user); err != nil {
+	usersRepository := repositories.UsersRepositoryImpl{}
+	if err := usersRepository.Create(&user); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err})
 		return
 	}
@@ -40,8 +42,8 @@ func (u *UserController) Login(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
-	var foundUser = models.UserByUsername(user.Username)
+	usersRepository := repositories.UsersRepositoryImpl{}
+	var foundUser = usersRepository.ShowByUsername(user.Username)
 
 	if foundUser == nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "User not found"})
