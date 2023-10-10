@@ -54,7 +54,26 @@ func (c *NotesController) Show(context *gin.Context) {
 		Repository: notesRepository,
 	}
 	note := service.Execute(uint(id))
+
 	context.JSON(200, gin.H{
 		"note": note,
+	})
+}
+
+func (c *NotesController) Delete(context *gin.Context) {
+	notesRepository := &repositories.NotesRepositoryImpl{}
+	id, _ := strconv.ParseUint(context.Param("id"), 10, 64)
+	service := services.DeleteNoteService{
+		Repository: notesRepository,
+	}
+	err := service.Execute(uint(id))
+	if err != nil {
+		context.JSON(400, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	context.JSON(200, gin.H{
+		"message": "Note deleted successfully",
 	})
 }

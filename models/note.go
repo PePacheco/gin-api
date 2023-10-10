@@ -32,12 +32,23 @@ func NotesCreate(note *Note) {
 
 func NoteById(id uint) *Note {
 	var note Note
-	database.First(&note, id)
+	result := database.First(&note, id)
+	if result.Error != nil {
+		return nil
+	}
+	println(note.Name)
 	return &note
 }
 
 func NoteByName(name string) *Note {
 	var note Note
-	database.First(&note, name)
+	result := database.Where("name = ?", name).First(&note)
+	if result.Error != nil {
+		return nil
+	}
 	return &note
+}
+
+func NotesDelete(note *Note) {
+	database.Delete(note)
 }

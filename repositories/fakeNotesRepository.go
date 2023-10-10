@@ -31,3 +31,11 @@ func (f *FakeNotesRepository) ShowByName(name string) *models.Note {
 	}
 	return nil
 }
+
+func (f *FakeNotesRepository) DeleteById(id uint) {
+	for i, note := range f.Notes {
+		if note.ID == id {
+			f.Notes = append(f.Notes[:i], f.Notes[i+1:]...)
+		}
+	}
+}

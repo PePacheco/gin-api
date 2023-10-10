@@ -10,7 +10,7 @@ import (
 var database *gorm.DB
 
 func ConnectToDatabase() {
-	dsn := "myuser:mypassword@tcp(localhost:3306)/mydatabase?charset=utf8"
+	dsn := "myuser:mypassword@tcp(localhost:3306)/mydatabase?charset=utf8mb4&parseTime=True&loc=Local"
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Fatalf("Failed to connect to the database: %v", err)
