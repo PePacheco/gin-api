@@ -77,3 +77,29 @@ func (c *NotesController) Delete(context *gin.Context) {
 		"message": "Note deleted successfully",
 	})
 }
+
+func (c *NotesController) Update(context *gin.Context) {
+	notesRepository := &repositories.NotesRepositoryImpl{}
+	id, _ := strconv.ParseUint(context.Param("id"), 10, 64)
+	var input models.NoteInput
+	if err := context.ShouldBindJSON(&input); err != nil {
+		context.JSON(400, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	note := models.Note{Name: input.Name, Content: input.Content}
+	service := services.UpdateNoteService{
+		Repository: notesRepository,
+	}
+	err := service.Execute(uint(id), &note)
+	if err != nil {
+		context.JSON(400, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	context.JSON(200, gin.H{
+		"note": note,
+	})
+}

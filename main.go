@@ -20,6 +20,7 @@ func main() {
 	r.POST("/notes", middlewares.AuthMiddleware(), notesController.Create)
 	r.GET("/notes/:id", middlewares.AuthMiddleware(), notesController.Show)
 	r.DELETE("/notes/:id", middlewares.AuthMiddleware(), notesController.Delete)
+	r.PUT("/notes/:id", middlewares.AuthMiddleware(), notesController.Update)
 
 	usersController := &controllers.UserController{}
 	r.POST("/register", usersController.Register)

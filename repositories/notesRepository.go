@@ -8,6 +8,7 @@ type NotesRepository interface {
 	ShowById(id uint) *models.Note
 	ShowByName(name string) *models.Note
 	DeleteById(id uint)
+	Update(id uint, note *models.Note)
 }
 
 type NotesRepositoryImpl struct{}
@@ -31,4 +32,8 @@ func (r *NotesRepositoryImpl) ShowByName(name string) *models.Note {
 func (r *NotesRepositoryImpl) DeleteById(id uint) {
 	note := models.NoteById(id)
 	models.NotesDelete(note)
+}
+
+func (r *NotesRepositoryImpl) Update(id uint, note *models.Note) {
+	models.NotesUpdate(id, note)
 }

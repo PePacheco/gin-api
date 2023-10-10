@@ -36,7 +36,6 @@ func NoteById(id uint) *Note {
 	if result.Error != nil {
 		return nil
 	}
-	println(note.Name)
 	return &note
 }
 
@@ -51,4 +50,8 @@ func NoteByName(name string) *Note {
 
 func NotesDelete(note *Note) {
 	database.Delete(note)
+}
+
+func NotesUpdate(id uint, note *Note) {
+	database.Model(&note).Where("id = ?", id).Updates(note)
 }
