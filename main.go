@@ -15,6 +15,7 @@ func main() {
 	models.MigrateDatabase()
 
 	r.GET("/notes", controllers.NotesIndex)
+	r.POST("/notes", controllers.NotesCreate)
 
 	log.Println("Starting server on port 8080")
 
