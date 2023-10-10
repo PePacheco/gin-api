@@ -17,6 +17,7 @@ func main() {
 
 	r.GET("/notes", notesController.Index)
 	r.POST("/notes", notesController.Create)
+	r.GET("/notes/:id", notesController.Show)
 
 	log.Println("Starting server on port 8080")
 

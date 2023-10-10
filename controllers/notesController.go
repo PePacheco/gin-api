@@ -4,6 +4,7 @@ import (
 	"notes-app/models"
 	"notes-app/repositories"
 	"notes-app/services"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -46,20 +47,14 @@ func (c *NotesController) Create(context *gin.Context) {
 	})
 }
 
-// func (c *NotesController) Show(context *gin.Context) {
-// 	notesRepository := &repositories.NotesRepositoryImpl{}
-// 	id := context.Param("id")
-// 	service := services.ShowNoteService{
-// 		Repository: notesRepository,
-// 	}
-// 	note, err := service.Execute(id)
-// 	if err != nil {
-// 		context.JSON(400, gin.H{
-// 			"error": err.Error(),
-// 		})
-// 		return
-// 	}
-// 	context.JSON(200, gin.H{
-// 		"note": note,
-// 	})
-// }
+func (c *NotesController) Show(context *gin.Context) {
+	notesRepository := &repositories.NotesRepositoryImpl{}
+	id, _ := strconv.ParseUint(context.Param("id"), 10, 64)
+	service := services.ShowNoteService{
+		Repository: notesRepository,
+	}
+	note := service.Execute(uint(id))
+	context.JSON(200, gin.H{
+		"note": note,
+	})
+}

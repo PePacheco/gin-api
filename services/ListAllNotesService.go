@@ -9,6 +9,6 @@ type ListAllNotesService struct {
 	Repository repositories.NotesRepository
 }
 
-func (s *ListAllNotesService) Execute() []models.Note {
-	return s.Repository.All()
+func (self *ListAllNotesService) Execute() []models.Note {
+	return self.Repository.All()
 }
