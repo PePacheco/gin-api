@@ -4,6 +4,7 @@ import (
 	"log"
 	"notes-app/controllers"
 	"notes-app/models"
+	"notes-app/repositories"
 
 	"github.com/gin-gonic/gin"
 )
@@ -14,8 +15,13 @@ func main() {
 	models.ConnectToDatabase()
 	models.MigrateDatabase()
 
-	r.GET("/notes", controllers.NotesIndex)
-	r.POST("/notes", controllers.NotesCreate)
+	notesRepository := &repositories.NotesRepositoryImpl{}
+	notesController := &controllers.NotesController{
+		Repository: notesRepository,
+	}
+
+	r.GET("/notes", notesController.Index)
+	r.POST("/notes", notesController.Create)
 
 	log.Println("Starting server on port 8080")
 

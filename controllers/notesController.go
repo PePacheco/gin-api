@@ -2,18 +2,23 @@ package controllers
 
 import (
 	"notes-app/models"
+	"notes-app/repositories"
 
 	"github.com/gin-gonic/gin"
 )
 
-func NotesIndex(context *gin.Context) {
-	notes := models.NotesAll()
+type NotesController struct {
+	Repository repositories.NotesRepository
+}
+
+func (c *NotesController) Index(context *gin.Context) {
+	notes := c.Repository.All()
 	context.JSON(200, gin.H{
 		"notes": notes,
 	})
 }
 
-func NotesCreate(context *gin.Context) {
+func (c *NotesController) Create(context *gin.Context) {
 	var input models.NoteInput
 	if err := context.ShouldBindJSON(&input); err != nil {
 		context.JSON(400, gin.H{
@@ -22,7 +27,7 @@ func NotesCreate(context *gin.Context) {
 		return
 	}
 	note := models.Note{Name: input.Name, Content: input.Content}
-	models.NotesCreate(&note)
+	c.Repository.Create(&note)
 	context.JSON(200, gin.H{
 		"note": note,
 	})
