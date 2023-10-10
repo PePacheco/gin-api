@@ -4,7 +4,6 @@ import (
 	"log"
 	"notes-app/controllers"
 	"notes-app/models"
-	"notes-app/repositories"
 
 	"github.com/gin-gonic/gin"
 )
@@ -14,11 +13,7 @@ func main() {
 
 	models.ConnectToDatabase()
 	models.MigrateDatabase()
-
-	notesRepository := &repositories.NotesRepositoryImpl{}
-	notesController := &controllers.NotesController{
-		Repository: notesRepository,
-	}
+	notesController := &controllers.NotesController{}
 
 	r.GET("/notes", notesController.Index)
 	r.POST("/notes", notesController.Create)
