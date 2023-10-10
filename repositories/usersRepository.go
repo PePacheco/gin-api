@@ -3,7 +3,7 @@ package repositories
 import "notes-app/models"
 
 type UsersRepository interface {
-	Create(user *models.User)
+	Create(user *models.User) error
 	ShowByUsername(username string) *models.User
 }
 

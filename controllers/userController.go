@@ -2,9 +2,9 @@ package controllers
 
 import (
 	"net/http"
-	"notes-app/helpers"
 	"notes-app/models"
 	"notes-app/repositories"
+	"notes-app/services"
 
 	"github.com/gin-gonic/gin"
 )
@@ -18,18 +18,14 @@ func (u *UserController) Register(c *gin.Context) {
 		return
 	}
 
-	hashedPassword, err := helpers.HashPassword(input.Password)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error hashing password"})
-		return
+	usersRepository := &repositories.UsersRepositoryImpl{}
+	signupService := services.SignupService{
+		Repository: usersRepository,
 	}
 
-	user := models.User{Username: input.Username, Email: input.Email}
-	user.Password = hashedPassword
-
-	usersRepository := repositories.UsersRepositoryImpl{}
-	if err := usersRepository.Create(&user); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err})
+	_, err := signupService.Execute(input)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
@@ -42,22 +38,15 @@ func (u *UserController) Login(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	usersRepository := repositories.UsersRepositoryImpl{}
-	var foundUser = usersRepository.ShowByUsername(user.Username)
-
-	if foundUser == nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "User not found"})
-		return
+	usersRepository := &repositories.UsersRepositoryImpl{}
+	loginService := services.LoginService{
+		Repository: usersRepository,
 	}
 
-	if !helpers.CheckPassword(user.Password, foundUser.Password) {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Incorrect password"})
-		return
-	}
+	token, err := loginService.Execute(user)
 
-	token, err := helpers.CreateToken(foundUser)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error generating token"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
