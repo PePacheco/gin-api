@@ -39,3 +39,11 @@ func (f *FakeNotesRepository) DeleteById(id uint) {
 		}
 	}
 }
+
+func (f *FakeNotesRepository) Update(id uint, note *models.Note) {
+	for i, n := range f.Notes {
+		if n.ID == id {
+			f.Notes[i] = *note
+		}
+	}
+}
