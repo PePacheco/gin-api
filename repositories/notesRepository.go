@@ -6,7 +6,7 @@ type NotesRepository interface {
 	All() []models.Note
 	Create(note *models.Note)
 	ShowById(id uint) *models.Note
-	ShowByName(name string) *models.Note
+	ShowByName(name string, excludeId ...uint) *models.Note
 	DeleteById(id uint)
 	Update(id uint, note *models.Note)
 }
@@ -25,8 +25,8 @@ func (r *NotesRepositoryImpl) ShowById(id uint) *models.Note {
 	return models.NoteById(id)
 }
 
-func (r *NotesRepositoryImpl) ShowByName(name string) *models.Note {
-	return models.NoteByName(name)
+func (r *NotesRepositoryImpl) ShowByName(name string, excludeId ...uint) *models.Note {
+	return models.NoteByName(name, excludeId...)
 }
 
 func (r *NotesRepositoryImpl) DeleteById(id uint) {

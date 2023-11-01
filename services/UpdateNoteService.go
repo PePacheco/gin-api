@@ -11,7 +11,7 @@ type UpdateNoteService struct {
 }
 
 func (self *UpdateNoteService) Execute(id uint, input *models.Note) error {
-	existingNote := self.Repository.ShowByName(input.Name)
+	existingNote := self.Repository.ShowByName(input.Name, id)
 	if existingNote != nil {
 		return fmt.Errorf("Note with name %s already exists", input.Name)
 	}

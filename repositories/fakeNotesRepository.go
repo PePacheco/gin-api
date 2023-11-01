@@ -23,7 +23,7 @@ func (f *FakeNotesRepository) ShowById(id uint) *models.Note {
 	return nil
 }
 
-func (f *FakeNotesRepository) ShowByName(name string) *models.Note {
+func (f *FakeNotesRepository) ShowByName(name string, excludeId ...uint) *models.Note {
 	for _, note := range f.Notes {
 		if note.Name == name {
 			return &note

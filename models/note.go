@@ -39,9 +39,16 @@ func NoteById(id uint) *Note {
 	return &note
 }
 
-func NoteByName(name string) *Note {
+func NoteByName(name string, excludeId ...uint) *Note {
 	var note Note
-	result := database.Where("name = ?", name).First(&note)
+	query := database.Where("name = ?", name)
+
+	if len(excludeId) > 0 {
+		query = query.Not("id", excludeId[0])
+	}
+
+	result := query.First(&note)
+
 	if result.Error != nil {
 		return nil
 	}
