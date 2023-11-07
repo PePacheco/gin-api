@@ -27,6 +27,14 @@ func AuthMiddleware() gin.HandlerFunc {
 			return
 		}
 
+		user, err := helpers.GetUserFromToken(tokenString)
+		if err != nil {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
+			c.Abort()
+			return
+		}
+
+		c.Set("user", user)
 		c.Next()
 	}
 }
